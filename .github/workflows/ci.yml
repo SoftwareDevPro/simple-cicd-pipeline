@@ -1,18 +1,27 @@
 name: CI Workflow
 
-# Trigger the workflow when code is pushed to the repository
 on: [push]
 
 jobs:
   build:
-    # Use the latest Ubuntu runner
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
-      # This action checks out the code from the repository so it can be accessed
       uses: actions/checkout@v3
-    
-    - name: Print message
-      # Run a shell command as part of this step
-      run: echo "Hello, GitHub Actions!"
+
+    - name: Set up Python
+      # This step sets up a Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      # Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    - name: Run tests
+      # Run tests using pytest
+      run: pytest tests/
